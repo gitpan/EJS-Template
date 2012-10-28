@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               EJS-Template
-version:            0.02
+version:            0.03
 abstract:           EJS (Embedded JavaScript) template engine
 author:
     - Mahiro Ando <mahiro@cpan.org>
