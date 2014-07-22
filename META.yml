@@ -1,25 +1,25 @@
---- #YAML:1.0
-name:               EJS-Template
-version:            0.03
-abstract:           EJS (Embedded JavaScript) template engine
+---
+abstract: 'EJS (Embedded JavaScript) template engine'
 author:
-    - Mahiro Ando <mahiro@cpan.org>
-license:            perl
-distribution_type:  module
-configure_requires:
-    ExtUtils::MakeMaker:  0
+  - 'Mahiro Ando <mahiro@cpan.org>'
 build_requires:
-    ExtUtils::MakeMaker:  0
-requires:
-    IO::Scalar:   0
-    JE:           0
-    Test::More:   0
-    URI::Escape:  0
-no_index:
-    directory:
-        - t
-        - inc
-generated_by:       ExtUtils::MakeMaker version 6.56
+  ExtUtils::MakeMaker: 0
+configure_requires:
+  ExtUtils::MakeMaker: 0
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.76, CPAN::Meta::Converter version 2.132620'
+license: perl
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: EJS-Template
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  IO::Scalar: 0
+  JE: 0
+  Test::More: 0
+  URI::Escape: 0
+version: 0.04

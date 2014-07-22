@@ -2,27 +2,30 @@ use 5.006;
 use strict;
 use warnings;
 
+=head1 NAME
+
+EJS::Template - EJS (Embedded JavaScript) template engine
+
+=cut
+
 package EJS::Template;
 
 use EJS::Template::Executor;
 use EJS::Template::Parser;
 
-=head1 NAME
-
-EJS::Template - EJS (Embedded JavaScript) template engine
-
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
-Anything inside the tag C<< <%...%> >> is executed as JavaScript code,
-and anything inside the tag C<< <%=...%> >> is replaced by the evaluated value.
+EJS is a template with JavaScript code embedded. Anything inside the tag
+C<< <%...%> >> is executed as JavaScript code, and anything inside the tag
+C<< <%=...%> >> is replaced by the evaluated value.
 
     # Perl
     use EJS::Template;
@@ -33,12 +36,18 @@ and anything inside the tag C<< <%=...%> >> is replaced by the evaluated value.
     Hello, <%= name %>!
     <% } %>
     
-    # Output
+    # Output (STDOUT)
     Hello, World!
     Hello, World!
     Hello, World!
 
-A simpler way to apply a template without an external file looks something like this:
+The C<process()> method can optionally take both input and output targets (file
+paths, IO handles, or scalar refs to strings).
+
+    EJS::Template->process('source.ejs', {name => 'World'}, 'destination.ejs');
+
+A simpler way to apply a template without an external file is to use C<apply()>
+method, which looks something like this:
 
     my $text = EJS::Template->apply('Hello, <%= name %>!', {name => 'World'});
 
@@ -92,7 +101,8 @@ See L</Trimming white spaces> for more details.
 
 =head1 DESCRIPTION
 
-EJS is a template engine with JavaScript code embedded.
+EJS is a template with JavaScript code embedded, and this module provides a
+template engine to generate output from EJS templates.
 
 It can be used as a general-purpose template engine to generate text documents,
 configurations, source code, etc.
@@ -140,9 +150,9 @@ See L</JavaScript engines> for more details.
 =cut
 
 sub new {
-	my ($class, %config) = @_;
-	my $self = {map {$_ => $config{$_}} qw(engine escape)};
-	return bless $self, $class;
+    my ($class, %config) = @_;
+    my $self = {map {$_ => $config{$_}} qw(engine escape)};
+    return bless $self, $class;
 }
 
 =head2 process
@@ -186,16 +196,16 @@ Examples:
 =cut
 
 sub process {
-	my ($self, $input, $variables, $output) = @_;
-	
-	eval {
-		my $parsed;
-		$self->parse($input, \$parsed);
-		$self->execute(\$parsed, $variables, $output);
-	};
-	
-	die $@ if $@;
-	return 1;
+    my ($self, $input, $variables, $output) = @_;
+    
+    eval {
+        my $parsed;
+        $self->parse($input, \$parsed);
+        $self->execute(\$parsed, $variables, $output);
+    };
+    
+    die $@ if $@;
+    return 1;
 }
 
 =head2 apply
@@ -215,15 +225,15 @@ text-to-text conversion.
 =cut
 
 sub apply {
-	my ($self, $input, $variables) = @_;
-	my $output;
-	
-	eval {
-		$self->process(\$input, $variables, \$output);
-	};
-	
-	die $@ if $@;
-	return $output;
+    my ($self, $input, $variables) = @_;
+    my $output;
+    
+    eval {
+        $self->process(\$input, $variables, \$output);
+    };
+    
+    die $@ if $@;
+    return $output;
 }
 
 =head2 parse
@@ -244,15 +254,15 @@ The semantics of INPUT and OUTPUT types are similar to C<process()>.
 =cut
 
 sub parse {
-	my ($self, $input, $parsed_output) = @_;
-	
-	eval {
-		my $parser = EJS::Template::Parser->new($self);
-		$parser->parse($input, $parsed_output);
-	};
-	
-	die $@ if $@;
-	return 1;
+    my ($self, $input, $parsed_output) = @_;
+    
+    eval {
+        my $parser = EJS::Template::Parser->new($self);
+        $parser->parse($input, $parsed_output);
+    };
+    
+    die $@ if $@;
+    return 1;
 }
 
 =head2 execute
@@ -269,15 +279,15 @@ The semantics of INPUT and OUTPUT types are similar to C<process()>.
 =cut
 
 sub execute {
-	my ($self, $parsed_input, $variables, $output) = @_;
-	
-	eval {
-		my $executor = EJS::Template::Executor->new($self);
-		$executor->execute($parsed_input, $variables, $output);
-	};
-	
-	die $@ if $@;
-	return 1;
+    my ($self, $parsed_input, $variables, $output) = @_;
+    
+    eval {
+        my $executor = EJS::Template::Executor->new($self);
+        $executor->execute($parsed_input, $variables, $output);
+    };
+    
+    die $@ if $@;
+    return 1;
 }
 
 
@@ -480,7 +490,11 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * GitHub repository (report bugs here)
+
+L<https://github.com/mahiro/perl-EJS-Template>
+
+=item * RT: CPAN's request tracker (report bugs here, alternatively)
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=EJS-Template>
 
